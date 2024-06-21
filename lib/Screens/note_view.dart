@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../model/NotesModel.dart';
 import '../widgets/colors.dart';
 import 'editNoteView.dart';
 class NoteView extends StatefulWidget {
-  const NoteView({ Key? key }) : super(key: key);
+   Note note;
+   NoteView({ Key? key , required this.note }) : super(key: key);
 
   @override
   _NoteViewState createState() => _NoteViewState();
@@ -31,7 +33,7 @@ class _NoteViewState extends State<NoteView> {
           IconButton(
               splashRadius: 17,
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EditNoteView()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EditNoteView(note: widget.note,)));
               },
               icon: Icon(Icons.edit_outlined))
         ],
@@ -42,9 +44,9 @@ class _NoteViewState extends State<NoteView> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children : [
-              Text("HEADING" , style: TextStyle(color: Colors.white , fontSize: 23 , fontWeight: FontWeight.bold),),
+              Text(widget.note.title , style: TextStyle(color: Colors.white , fontSize: 23 , fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
-              Text(note,style: TextStyle(color: Colors.white),)
+              Text(widget.note.content,style: TextStyle(color: Colors.white),)
             ]
 
         ),

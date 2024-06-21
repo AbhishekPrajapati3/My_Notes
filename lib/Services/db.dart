@@ -67,7 +67,6 @@ class NotesDatabase {
 
   Future updateNote(Note note) async{
     final db = await instance.database;
-
     await db!.update(NotesImpNames.TableName, note.toJson(), where:  '${NotesImpNames.id} = ?' ,whereArgs: [note.id] );
   }
 

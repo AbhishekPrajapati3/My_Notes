@@ -15,7 +15,7 @@ class Note{
   final bool pin;
   final String title;
   final String content;
-  final DateTime createdTime;
+  final String? createdTime;
 
   const Note({
     this.id,
@@ -30,7 +30,7 @@ class Note{
     bool? pin,
     String? title,
     String? content,
-    DateTime? createdTime,
+    String? createdTime,
   }) {
     return Note(id : id?? this.id ,
         pin:pin ?? this.pin,
@@ -47,7 +47,7 @@ class Note{
         pin : json[NotesImpNames.pin] ==1,
         title: json[NotesImpNames.title] as String,
         content: json[NotesImpNames.content] as String,
-        createdTime: DateTime.parse(json[NotesImpNames.createdTime] as String)
+        createdTime: NotesImpNames.createdTime
     );
   }
 
@@ -57,7 +57,7 @@ class Note{
       NotesImpNames.pin : pin ? 1 : 0,
       NotesImpNames.title : title,
       NotesImpNames.content : content,
-      NotesImpNames.createdTime : createdTime.toIso8601String()
+      NotesImpNames.createdTime : createdTime.toString()
     };
   }
 }

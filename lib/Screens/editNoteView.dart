@@ -1,16 +1,32 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Services/db.dart';
+import '../model/NotesModel.dart';
 import '../widgets/colors.dart';
+import 'note_view.dart';
+
 
 class EditNoteView extends StatefulWidget {
-  const EditNoteView({ Key? key }) : super(key: key);
+  Note note;
+  EditNoteView({required this.note} );
 
   @override
   _EditNoteViewState createState() => _EditNoteViewState();
 }
 
 class _EditNoteViewState extends State<EditNoteView> {
+  late String  NewTitle ;
+  late String NewNoteDet ;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    this.NewTitle = widget.note.title.toString();
+    this.NewNoteDet = widget.note.content.toString();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +37,12 @@ class _EditNoteViewState extends State<EditNoteView> {
         actions: [
           IconButton(
               splashRadius: 17,
-              onPressed: () {},
+              onPressed: () async{
+                Note newNote = Note(content: NewNoteDet , title: NewTitle , createdTime:  widget.note.createdTime, pin: false , id: widget.note.id);
+                  await NotesDatabase.instance.updateNote(newNote);
+
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>NoteView(note: newNote,)));
+              },
               icon: Icon(Icons.save_outlined))
         ],
       ),
@@ -31,39 +52,52 @@ class _EditNoteViewState extends State<EditNoteView> {
         margin : EdgeInsets.symmetric(horizontal : 15 ,vertical: 10),
         child: Column(
           children: [
-            TextField(
-              cursorColor: white,
-              style: TextStyle(fontSize: 25, color: Colors.white , fontWeight: FontWeight.bold),
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  hintText: "Title",
-                  hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.withOpacity(0.8))),
-            ),
-            Container(
-              height: 300,
-              child: TextField(
+            Form(
+              child:            TextFormField(
+                initialValue: NewTitle,
                 cursorColor: white,
-                keyboardType:  TextInputType.multiline,
-                minLines: 50,
-                maxLines: null,
-                style: TextStyle(fontSize: 17, color: Colors.white),
+                onChanged: (value){
+                  NewTitle = value;
+                },
+                style: TextStyle(fontSize: 25, color: Colors.white , fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
-                    hintText: "Note",
+                    hintText: "Title",
                     hintStyle: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey.withOpacity(0.8))),
               ),
+            ),
+
+            Container(
+                height: 300,
+                child: Form(
+                  child: TextFormField(
+                    onChanged: (value){
+                      NewNoteDet = value;
+                    },
+                    initialValue: NewNoteDet,
+                    cursorColor: white,
+                    keyboardType:  TextInputType.multiline,
+                    minLines: 50,
+                    maxLines: null,
+                    style: TextStyle(fontSize: 17, color: Colors.white),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: "Note",
+                        hintStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.withOpacity(0.8))),
+                  ),
+                )
             )
 
           ],
